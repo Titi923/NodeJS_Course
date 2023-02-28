@@ -31,7 +31,6 @@ app.post('/api/v1/tours', (req, res) => {
   // Finally modify the database/file, and we use an async function because we are in the event loop & NEVER EVER BLOCK THE EVENT LOOP!!!
   fs.writeFile(`${__dirname}/dev-data/data/tours-simple.json`, JSON.stringify(tours), err => {
     // What we want to do as soon as the file is written?
-    
     // 200 OK, 201 Created
     res.status(201).json({
       status: "success",
