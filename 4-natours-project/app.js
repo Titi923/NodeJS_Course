@@ -6,6 +6,16 @@ const app = express();
 // middleware (is a function that can modify the incoming request data)
 app.use(express.json());
 
+app.use((req, res, next) => {
+  console.log('Hello from the middleware 👋 ');
+  next()
+});
+
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next()
+})
+
 // Read the data first
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
@@ -13,8 +23,11 @@ const tours = JSON.parse(
 
 // Get All Tours
 const getAllTours = (req, res) => {
+  console.log(req.requestTime);
+
   res.status(200).json({
     status: 'success',
+    requestedAt: req.requestTime,
     results: tours.length,
     data: {
       tours,
@@ -67,7 +80,7 @@ const createTour = (req, res) => {
 
   // res.send('Done'); // No need to send the res twice
 };
-// PATCH Requests 
+// PATCH Requests
 const updateTour = (req, res) => {
   if (req.params.id * 1 > tours.length) {
     return res.status(404).json({
@@ -83,7 +96,7 @@ const updateTour = (req, res) => {
     },
   });
 };
-// DELETE Requests 
+// DELETE Requests
 const deleteTour = (req, res) => {
   if (req.params.id * 1 > tours.length) {
     return res.status(404).json({
@@ -106,7 +119,11 @@ const deleteTour = (req, res) => {
 
 // Refactored route
 app.route('/api/v1/tours').get(getAllTours).post(createTour);
-app.route('/api/v1/tours/:id').get(getTour).patch(updateTour).delete(deleteTour);
+app
+  .route('/api/v1/tours/:id')
+  .get(getTour)
+  .patch(updateTour)
+  .delete(deleteTour);
 
 // Create a server that listen to a port
 const port = 8000;
