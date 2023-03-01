@@ -85,6 +85,21 @@ app.patch('/api/v1/tours/:id', (req, res) => {
   });
 });
 
+// DELETE Requests
+app.delete('/api/v1/tours/:id', (req, res) => {
+  if (req.params.id * 1 > tours.length) {
+    return res.status(404).json({
+      status: 'Fail',
+      message: 'Invalid ID',
+    });
+  }
+  
+  res.status(204).json({
+    staus: 'success',
+    data: null
+  });
+});
+
 // Create a server that listen to a port
 const port = 8000;
 app.listen(port, () => {
