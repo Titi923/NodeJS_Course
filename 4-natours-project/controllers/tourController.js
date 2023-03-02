@@ -18,6 +18,17 @@ exports.checkID = (req, res, next, val) => {
   next();
 };
 
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price) {
+    return res.status(400).json({
+      status: 'fail',
+      meesage: 'Missing name or price',
+    });
+  }
+
+  next();
+};
+
 exports.getAllTours = (req, res) => {
   console.log(req.requestTime);
 
@@ -71,7 +82,7 @@ exports.createTour = (req, res) => {
 // PATCH Requests
 exports.updateTour = (req, res) => {
   res.status(200).json({
-    staus: 'success',
+    status: 'success',
     data: {
       tour: '<Updated tour here>',
     },
@@ -80,7 +91,7 @@ exports.updateTour = (req, res) => {
 // DELETE Requests
 exports.deleteTour = (req, res) => {
   res.status(204).json({
-    staus: 'success',
+    status: 'success',
     data: null,
   });
 };
